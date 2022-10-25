@@ -2,26 +2,47 @@ import { PrismaClient } from '@prisma/client'
 import { Request, Response } from 'express'
 const prisma = new PrismaClient()
 
-module.exports = {
+interface IUser {
+    id: number;
+    name: string;
+    email: string;
+}
+class UserController {
 
-    async create(req: Request, res: Response):Promise<Response> {
+    async index(req: Request, res: Response): Promise<Response> {
 
-    const {name,email} = req.body
-    
-     let user = await prisma.user.findUnique({ where: { email } })
+        const user = await prisma.user.findMany()
 
-         if (user) {
+        return res.json({ user })
+
+    }
+
+    async showById(req: Request, res: Response): Promise<Response> {
+
+        const { id } = req.params
+
+        const user = await prisma.user.findUnique({ where: { id: Number(id) } })
+
+        return res.json({ user })
+    }
+
+    async create(req: Request, res: Response): Promise<Response> {
+
+        const { name, email }: IUser = req.body
+
+        let user = await prisma.user.findUnique({ where: { email } })
+
+        if (user) {
             return res.json({ error: "ja existe um Usuário com este email" })
         }
         user = await prisma.user.create({
             data: {
-                 name,
-                 email,
+                name,
+                email,
             },
-         })
-         return res.json({ user})
+        })
+        return res.json({ user })
     }
-
 }
 
-
+export default new UserController();
