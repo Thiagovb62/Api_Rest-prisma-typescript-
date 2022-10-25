@@ -43,6 +43,27 @@ class UserController {
         })
         return res.json({ user })
     }
+
+    async update(req: Request, res: Response): Promise<Response> {
+
+        const { id } = req.params
+
+        const { name, email }: IUser = req.body
+
+        let user = await prisma.user.findUnique({ where: { id: Number(id) } })
+
+        if (!user) {
+            return res.json({ error: "User not found" })
+        }
+        user = await prisma.user.update({
+            where: { id: Number(id) }, data: {
+                name,
+                email,
+            }
+        })
+
+        return res.json({sucess:"usuario atualizado com sucesso"})
+    }
 }
 
 export default new UserController();
