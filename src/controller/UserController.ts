@@ -62,7 +62,17 @@ class UserController {
             }
         })
 
-        return res.json({sucess:"usuario atualizado com sucesso"})
+        return res.json({ sucess: "usuario atualizado com sucesso" })
+    }
+
+    async delete(req: Request, res: Response): Promise<Response> {
+
+        const { id } = req.params
+
+        const user = await prisma.user.delete({ where: { id: Number(id) } })
+
+        return res.json({ sucess: "usuario deletado com sucesso" })
+
     }
 }
 
