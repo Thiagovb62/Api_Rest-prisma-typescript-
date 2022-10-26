@@ -11,5 +11,6 @@ routes.delete('/users/delete/:id', UserController.delete)
 
 routes.get('/jobs', JobController.index)
 routes.post('/users/jobs/:id', JobController.create)
+routes.delete('/jobs/delete/:id', JobController.delete)
 
 export default routes

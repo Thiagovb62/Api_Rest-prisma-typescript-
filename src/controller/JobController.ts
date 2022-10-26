@@ -42,6 +42,19 @@ class JobController {
         return res.json({ job })
     }
 
+    async delete(req: Request, res: Response): Promise<Response> {
+
+        const { id } = req.params
+
+        const job = await prisma.job.findUnique({ where: { id: Number(id) } })
+
+        if (!job) return res.json({ error: 'Job not found' })
+
+        await prisma.job.delete({ where: { id: Number(id) } })
+
+        return res.json({ sucess: "Trabalho deletado com sucesso" })
+    }
+
 }
 
 export default new JobController()
